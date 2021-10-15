@@ -1,0 +1,25 @@
+@font-face{
+  font-family: 'game-font-regular';
+  src: url('./media/fonts/ComicNeue-Regular.ttf') format('.ttf');
+}
+body {
+  margin: 0;
+  font-family: 'game-font-regular',cursive;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width:100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding:0;
+  user-select: none;
+  user-zoom: 0;
+}

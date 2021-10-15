@@ -1,0 +1,23 @@
+.model{
+    width:60vw;
+    height: 40vh;
+    background-color: tan;
+    border-radius: 20px;
+    box-shadow: 1px 1px 25px 0px hsla(0, 0%, 0%,0.2);
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    z-index: 50;
+}
+.overlay{
+    position: absolute;
+    width: 100vw;
+    top:0;
+    left: 0;
+    background-color: hsla(0, 0%, 0%,0.5);
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    
+}
