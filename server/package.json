@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "tsc": "./node_modules/typescript/bin/tsc",
+    "tsc": "tsc",
     "postinstall": "npm run tsc",
     "dev":"nodemon index.ts"
   },
