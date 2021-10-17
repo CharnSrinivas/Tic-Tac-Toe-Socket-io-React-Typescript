@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build":"tsc",
+    "tsc": "tsc",
+    "postinstall": "npm run tsc",
     "dev":"nodemon index.ts"
   },
   "author": "CharanSrinivas",
