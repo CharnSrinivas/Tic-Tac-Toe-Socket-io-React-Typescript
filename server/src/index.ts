@@ -1,6 +1,7 @@
-import HttpServer from './socket'
+// import HttpServer from './socket'
+import app from "./app";
 const Port = 5000;
-HttpServer.listen(Port,()=>{
+app.listen(Port,()=>{
     console.log(`listening to port ${Port}...\n`);
     
 })
