@@ -1,4 +1,4 @@
-import { GameStateModel ,GameInitialState} from "./initialStates";
+import { GameInitialState} from "./initialStates";
 import * as actions from '../actions/actonTypes'
 export default function gameReducer(state=GameInitialState(),action:{type:string,payload:any})
 {

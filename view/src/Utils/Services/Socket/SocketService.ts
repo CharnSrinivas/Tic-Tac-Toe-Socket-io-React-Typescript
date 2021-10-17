@@ -1,4 +1,3 @@
-import { eventNames } from 'process';
 import { Socket, io } from 'socket.io-client';
 import * as eveNames from './eventNames';
 // import store from '../../../Redux/store'

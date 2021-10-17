@@ -31,3 +31,5 @@
 
 /view/.env
 /server/.env
+
+/..generate-file-trees.sh

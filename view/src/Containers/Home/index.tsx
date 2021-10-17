@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import styles from './styles.module.css';
 import Popup from '../../Components/Popup';
 import { stateModel } from '../../Redux/Reducers/initialStates';
 import { change_player, change_current_player } from '../../Redux/actions/boardActions';
-import { saveGameState } from '../../Utils/Utils';
 import { setGameId } from '../../Redux/actions/gameActions';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 interface Props {
     [x: string]: any
 }
+
 interface State {
     show_create_game_popup: boolean;
     show_join_game_popup: boolean
@@ -46,10 +46,10 @@ const CreateGamePopUp = connect(mapStateToProps, mapDispatchToProps)
             }
         }
         return (
-            <div>
-                <h2>ENTER GAME ID</h2>
+            <div className={styles['popup-container']}>
+                <h2>Enter Game Id</h2>
                 <input type="number" id='game-create-btn' />
-                <button onClick={onCreate}>create</button>
+                <div onClick={onCreate}>create</div>
             </div>
         )
     }
@@ -67,10 +67,10 @@ const JoinGamePopup = connect(mapStateToProps, mapDispatchToProps)
             }
         }
         return (
-            <div>
-                <h2>ENTER GAME ID</h2>
+            <div className={styles['popup-container']}>
+                <h2>Enter Game Id</h2>
                 <input type="number" id='join-game-btn' />
-                <button onClick={onJoin}>Join</button>
+                <div onClick={onJoin}>Join</div>
             </div>
         )
     }
@@ -83,19 +83,23 @@ export default class index extends Component<Props, State> {
     render() {
         return (
             <div className={styles['home-container']}>
-                <button onClick={() => { this.setState({ show_join_game_popup: false, show_create_game_popup: true }) }}>Create</button>
-                <button onClick={() => { this.setState({ show_join_game_popup: true, show_create_game_popup: false }) }}>Join</button>
-
-                {this.state.show_create_game_popup &&
-                    <Popup
-                        content={<CreateGamePopUp history={this.props.history} />}
-                        onExit={() => { this.setState({ show_join_game_popup: false, show_create_game_popup: false }) }} />
-                }
-                {this.state.show_join_game_popup &&
-                    <Popup
-                        content={<JoinGamePopup history={this.props.history} />}
-                        onExit={() => { this.setState({ show_join_game_popup: false, show_create_game_popup: false }) }} />
-                }
+                <div className={styles['wrapper']}>
+                    <h1>Tic-Tac-Toe</h1>
+                    <div className={styles['buttons']}>
+                        <div onClick={() => { this.setState({ show_join_game_popup: false, show_create_game_popup: true }) }}>Create</div>
+                        <div onClick={() => { this.setState({ show_join_game_popup: true, show_create_game_popup: false }) }}>Join</div>
+                    </div>
+                    {this.state.show_create_game_popup &&
+                        <Popup
+                            content={<CreateGamePopUp history={this.props.history} />}
+                            onExit={() => { this.setState({ show_join_game_popup: false, show_create_game_popup: false }) }} />
+                    }
+                    {this.state.show_join_game_popup &&
+                        <Popup
+                            content={<JoinGamePopup history={this.props.history} />}
+                            onExit={() => { this.setState({ show_join_game_popup: false, show_create_game_popup: false }) }} />
+                    }
+                </div>
             </div>
         )
     }

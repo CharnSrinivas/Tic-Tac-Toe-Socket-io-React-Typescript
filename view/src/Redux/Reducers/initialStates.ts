@@ -1,4 +1,4 @@
-import { player } from "../../models"
+import { player } from "../../gameModels"
 import { getSavedGameState } from "../../Utils/Utils"
 export const BoardInitialState = ():BoardStateModel => {
     let saved_game_state = getSavedGameState();

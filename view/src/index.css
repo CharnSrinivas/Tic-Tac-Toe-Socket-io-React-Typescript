@@ -1,7 +1,20 @@
 @font-face{
   font-family: 'game-font-regular';
-  src: url('./media/fonts/ComicNeue-Regular.ttf') format('.ttf');
+  src: url('./assets/fonts/ComicNeue-Regular.ttf');
+  
 }
+@font-face{
+  font-family: 'game-font-bold';
+  src:url('./assets/fonts/ComicNeue-Bold.ttf') ;
+
+}
+:root{
+  --bg-color:hsl(216, 18%, 16%);
+  --primary-color:hsl(183, 100%, 35%);
+  --secondary-color:hsl(217, 10%, 25%);
+}
+
+
 body {
   margin: 0;
   font-family: 'game-font-regular',cursive;
@@ -12,10 +25,6 @@ body {
   overflow: hidden;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
 *{
   box-sizing: border-box;
   margin: 0;

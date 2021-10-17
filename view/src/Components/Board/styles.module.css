@@ -1,30 +1,40 @@
 .container{
+    width:100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    align-content: center;
-    background-color: beige;
+    align-items: center;
+    background-color: var(--bg-color);
+    
+}
+.board{
+    width:fit-content
+}
+.container .board .column {
+    display: flex;
     width: fit-content;
 }
-.container .column {
-    display: flex;
-    width: inherit;
+.board[data-canplay='true']  .cell:hover{
+    background-color: var(--secondary-color);
 }
 .cell{
     padding:2px;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     width:5rem;
     height: 5rem;
 }
+
 .vr-line{
     border-radius: 25px;
-    background-color: black;
+    background-color: hsl(0, 0%, 90%);
     height: calc(inherit - 200rem);
     width:2px;
 }
 .hr-line{
-    background-color: black;
+    background-color:  hsl(0, 0%, 90%);
     height: 3px;
     border-radius: 25px;
 

@@ -1,5 +1,5 @@
 import * as actions from './actonTypes';
-import { player } from '../../models';
+import { player } from '../../gameModels';
 export function change_player(player: 1 | 0) {
     return {
         type: actions.CHANGE_PLAYER,

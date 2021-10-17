@@ -1,5 +1,4 @@
 import styles from './styles.module.css'
-
 interface Props {
     content:JSX.Element;
     onExit?:Function;
@@ -8,10 +7,11 @@ interface Props {
 export default function index({content,onExit}: Props): JSX.Element {
     return (
         <>
+    <div className={styles['overlay']} onClick={()=>{if(onExit)onExit()}}></div>
             <div className={styles['model']}>
                 {content}
+             
             </div>
-        <div className={styles['overlay']} onClick={()=>{if(onExit)onExit()}}></div>
         </>
     )
 }

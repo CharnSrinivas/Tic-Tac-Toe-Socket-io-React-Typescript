@@ -1,5 +1,5 @@
 import store from "../Redux/store";
-import { player } from "../models";
+import { player } from "../gameModels";
 const Board = 'board';
 export function addToLocalStorage(board: player[]): player[] | null {
     let prev_board = localStorage.getItem(Board);

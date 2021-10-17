@@ -1,23 +1,27 @@
 .model{
-    width:60vw;
+    min-width:50vw;
     height: 40vh;
-    background-color: tan;
+    background-color: var(--secondary-color);
     border-radius: 20px;
     box-shadow: 1px 1px 25px 0px hsla(0, 0%, 0%,0.2);
-    position: absolute;
-    top:50%;
-    left:50%;
+    margin:auto 50%;
     transform: translate(-50%,-50%);
-    z-index: 50;
-}
+    position: relative;
+    z-index: 10;
+}    
 .overlay{
     position: absolute;
     width: 100vw;
     top:0;
     left: 0;
-    background-color: hsla(0, 0%, 0%,0.5);
+    background-color: hsla(0, 0%, 0%,0.25);
     right: 0;
     bottom: 0;
-    z-index: 0;
+    z-index: 5;
     
+}
+@media screen and (max-width:480px) {
+    .model{
+        min-width:70vw;
+    }
 }

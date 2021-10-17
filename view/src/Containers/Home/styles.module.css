@@ -1,3 +1,64 @@
-.home-container{
-    background-color: #FFC46B;
+.home-container  {
+    width: 100vw;
+    height: 100vh;
+    background-color:hsl(216, 18%, 16%);
+    color:hsl(0, 0%, 90%);
+    padding:2rem;
+    margin:auto;
+    
+}
+.wrapper{
+    width:fit-content;
+    height:fit-content;
+    margin:20% auto;
+}
+h1{
+    
+   text-align: center; 
+   color:var(--primary-color);
+   font-family: 'game-font-bold',cursive;
+   font-weight: bolder;
+   letter-spacing: 0.2rem;
+   font-size: 2.8rem;
+}
+.buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+}
+.buttons div ,.popup-container div{
+    cursor: pointer;
+    letter-spacing: 0.08rem;
+    font-weight: bolder;
+    font-size: 1.1rem;
+    margin:1rem 0;
+    background-color: hsl(183, 100%, 35%);
+    padding:0.6rem 1rem;
+    border-radius: 6px;
+}
+.popup-container{
+    display: flex;
+    flex-direction: column;
+    margin:auto;
+    align-items: center;
+    padding:1rem;
+}
+.popup-container h2{
+    text-align: center;
+    font-family: 'game-font-bold';
+    font-weight: bolder;
+}
+.popup-container input{
+    box-decoration-break: none;
+    appearance: textfield;
+    border-radius: 5px;
+    border: none;
+    width:60%;
+    outline:none;
+    margin:0.6rem;
+}
+.popup-container input:focus{
+    box-shadow: 1px 1px 25px 0 hsla(216, 20%, 20%, 0.5);
+    
 }

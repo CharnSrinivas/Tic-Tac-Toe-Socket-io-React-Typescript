@@ -1,0 +1,52 @@
+./view/src/
+├── assets
+│   ├── fonts
+│   │   ├── ComicNeue-BoldItalic.ttf
+│   │   ├── ComicNeue-Bold.ttf
+│   │   ├── ComicNeue-Italic.ttf
+│   │   ├── ComicNeue-LightItalic.ttf
+│   │   ├── ComicNeue-Light.ttf
+│   │   └── ComicNeue-Regular.ttf
+│   └── player-icons
+│       ├── frame.svg
+│       ├── o.svg
+│       └── x.svg
+├── Components
+│   ├── Board
+│   │   ├── Board.tsx
+│   │   └── styles.module.css
+│   └── Popup
+│       ├── index.tsx
+│       └── styles.module.css
+├── config.ts
+├── Containers
+│   ├── App
+│   │   ├── index.tsx
+│   │   └── style.module.css
+│   └── Home
+│       ├── index.tsx
+│       └── styles.module.css
+├── gameModels.ts
+├── index.css
+├── index.tsx
+├── logo.svg
+├── react-app-env.d.ts
+├── Redux
+│   ├── actions
+│   │   ├── actonTypes.ts
+│   │   ├── boardActions.ts
+│   │   └── gameActions.ts
+│   ├── Reducers
+│   │   ├── boardReducer.ts
+│   │   ├── gameReducer.ts
+│   │   ├── index.ts
+│   │   └── initialStates.ts
+│   └── store.ts
+└── Utils
+    ├── Services
+    │   └── Socket
+    │       ├── eventNames.ts
+    │       └── SocketService.ts
+    └── Utils.ts
+
+15 directories, 34 files
