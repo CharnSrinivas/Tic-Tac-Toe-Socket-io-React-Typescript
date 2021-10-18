@@ -1,89 +1,149 @@
 .container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--bg-color);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--bg-color);
+    padding: 1rem;
 }
+
 .board {
-  width: fit-content;
-  margin-top: 5rem;
+    width: fit-content;
+    margin-top: 5rem;
 }
+
 .container .board .column {
-  display: flex;
-  width: fit-content;
+    display: flex;
+    width: fit-content;
 }
 
 .cell {
-  padding: 2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 5rem;
-  height: 5rem;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 5rem;
+    height: 5rem;
 }
-.cell[data-canclick='true']{
+
+.cell[data-canclick='true'] {
     cursor: pointer;
-    
 }
-.cell[data-canclick='true']:hover{
-background-color: var(--secondary-color);
+
+.cell[data-canclick='true']:hover {
+    background-color: var(--secondary-color);
 }
+
 .vr-line {
-  border-radius: 25px;
-  background-color: hsl(0, 0%, 90%);
-  height: calc(inherit - 200rem);
-  width: 2px;
+    border-radius: 25px;
+    background-color: hsl(0, 0%, 90%);
+    height: 100%;
+    width: 2px;
 }
+
 .hr-line {
-  background-color: hsl(0, 0%, 90%);
-  height: 3px;
-  border-radius: 25px;
+    background-color: hsl(0, 0%, 90%);
+    height: 3px;
+    border-radius: 25px;
 }
+
 .cell svg {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
+
 .cell svg rect {
-  fill: hsl(0, 70%, 65%);
+    fill: hsl(0, 70%, 65%);
 }
+
 .player-waiting-container,
 .winner-banner-container {
-  background-color: hsla(0, 0%, 100%, 0.2);
-  position: absolute;
-  height:100vh;
-  width:100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    background-color: hsla(0, 0%, 100%, 0.2);
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 .player-waiting-wrapper,
 .winner-banner-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
 }
+
 .winner-banner-wrapper h1 {
-  font-size: 3.5rem;
-  font-family: "game-font-bold";
-  font-weight: bold;
-  letter-spacing: 1px;
+    font-size: 3.5rem;
+    font-family: "game-font-bold";
+    font-weight: bold;
+    letter-spacing: 1px;
 }
+
 .player-waiting-wrapper h1 {
-  font-size: 1.7rem;
-  font-family: "game-font-bold";
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: hsl(
-    var(--primary-color-hue),
-    var(--primary-color-sat),
-    calc(var(--primary-color-lit) + 8%)
-  );
+    font-size: 1.7rem;
+    font-family: "game-font-bold";
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: hsl( var(--primary-color-hue), var(--primary-color-sat), calc(var(--primary-color-lit) + 8%));
 }
+
 .player-waiting-wrapper h3 {
-  margin-top: 3rem;
-  letter-spacing: 0px;
-  color: #ffff;
+    margin-top: 3rem;
+    letter-spacing: 0px;
+    color: #ffff;
+}
+
+.close-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
+.close-game-container h2 {
+    color: white;
+    font-weight: bolder;
+    font-size: 1.5rem;
+}
+
+.close-game-container .btn-container {
+    margin-top: 2.3rem;
+    display: flex;
+    justify-content: space-around;
+    width: 100%
+}
+
+.close-game-container .btn-container div {
+    color: hsl(0, 0%, 90%);
+    background-color: var(--primary-color);
+    padding: 0.3rem;
+    font-weight: bolder;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.close-game-container .btn-container .negative-btn {
+    color: hsl(120, 100%, 25%);
+    background-color: transparent;
+}
+
+.close-game-container .btn-container .positive-btn {
+    background-color: transparent;
+    color: hsl(0, 60%, 55%);
+}
+
+.display-turn-container h2 {
+    font-family: 'game-font-bold';
+    color: hsl(0, 0%, 80%)
+}
+
+.display-turn-container {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    height: 2rem;
 }

@@ -1,4 +1,5 @@
 import { Socket, io } from 'socket.io-client';
+import { player } from '../../../gameModels';
 import * as eveNames from './eventNames';
 // import store from '../../../Redux/store'
 class SocketService {
@@ -94,5 +95,24 @@ class SocketService {
 
         })
     }
+    close_game(room_id:string,player:player,onClose?:Function){
+        return new Promise((res, rej) => {
+            const onclose = (props: any) => {
+                if(onClose)onClose();
+                res(props);
+                
+            }
+            if (this.socket) {
+                try {
+                    this.socket.emit(eveNames.close_game, room_id,player,onclose);
+                    this.socket.on('error', (err) => rej(err));
+                } catch (error) {
+                    rej(error);
+                }
+            } else { rej(); }
+
+        })
+    }
+    
 }
 export default new SocketService();

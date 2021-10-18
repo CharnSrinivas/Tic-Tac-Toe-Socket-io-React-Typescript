@@ -44,10 +44,10 @@ io.on('connection', (socket: Socket) => {
 
     // ? 🔐 🔐 closing game
     socket.on(eve_names.close_game,
-        async (room_id, player: number, onLeft?: Function) => {
+         (room_id, player: number, onLeft?: Function) => {
             socket.broadcast.to(room_id).emit(eve_names.player_left, player);
-            
             socket.disconnect();
+            console.log(room_id,player);
             if (onLeft) onLeft();
             // console.log(await io.sockets.in(room_id).allSockets())
         })
