@@ -32,7 +32,7 @@ background-color: var(--secondary-color);
 .vr-line {
   border-radius: 25px;
   background-color: hsl(0, 0%, 90%);
-  height: calc(inherit - 200rem);
+  height:100%;
   width: 2px;
 }
 .hr-line {

@@ -32,4 +32,7 @@
 /view/.env
 /server/.env
 
-/..generate-file-trees.sh
+/view/package-lock.json
+/server/package-lock.json
+
+/.generate-file-trees.sh
