@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 import { stateModel } from '../../Redux/Reducers/initialStates';
 import { Dispatch } from 'redux';
 import { server_socket_url } from '../../config'
-import { update_board,set_winner, change_player, change_current_player, update_scores, change_is_playing, update_opponent_join } from '../../Redux/actions/boardActions';
+import { update_board, set_winner, change_player, change_current_player, update_scores, change_is_playing, update_opponent_join } from '../../Redux/actions/boardActions';
 import SocketService from '../../Utils/Services/Socket/SocketService';
 import { connect } from 'react-redux';
 import { Board as board, player } from '../../gameModels';
@@ -21,18 +21,18 @@ export interface IBoardProps {
   update_board: Function;
   game_id: string;
   opponent_joined: boolean;
-  winner:player;
+  winner: player;
   change_player: Function;
   change_current_player: Function;
   update_scores: Function;
   change_is_playing: Function;
   update_opponent_join: Function;
-  set_winner:Function;
+  set_winner: Function;
 
 }
 
 export interface IBoardState {
-  won: player
+  close_game: boolean;
 }
 
 const mapStateToProps = (state: stateModel) => {
@@ -44,7 +44,7 @@ const mapStateToProps = (state: stateModel) => {
     is_playing: state.board.is_playing,
     game_id: state.game.game_id,
     opponent_joined: state.board.opponent_joined,
-    winner:state.board.winner
+    winner: state.board.winner
   };
 };
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -55,7 +55,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     update_scores: (scores: { '1': number, '0': number }) => dispatch(update_scores(scores)),
     change_is_playing: (is_playing: boolean) => dispatch(change_is_playing(is_playing)),
     update_opponent_join: (is_joined: boolean) => dispatch(update_opponent_join(is_joined)),
-    set_winner:(winner:player)=>dispatch(set_winner(winner))
+    set_winner: (winner: player) => dispatch(set_winner(winner))
   };
 };
 const BoardCell = connect(mapStateToProps, mapDispatchToProps)((props: any): JSX.Element => {
@@ -68,7 +68,7 @@ const BoardCell = connect(mapStateToProps, mapDispatchToProps)((props: any): JSX
     }
   }
   let can_click = props.is_playing && props.board[props.index] === -1 ? true : false;
-  
+
 
   return (
     <div className={styles['cell']} onClick={updateBoard} data-canclick={can_click}>
@@ -84,15 +84,16 @@ const BoardCell = connect(mapStateToProps, mapDispatchToProps)((props: any): JSX
   )
 })
 
-class Board extends React.Component<IBoardProps> {
+class Board extends React.Component<IBoardProps, IBoardState> {
   constructor(props: any) {
 
     super(props);
+    this.state = { close_game: false }
 
     SocketService.connect(server_socket_url).then(() => {
       SocketService.joinRoom(this.props.game_id).then(() => {
         this.props.change_is_playing(true);
-          SocketService.listenForOpponentJoining().then(({ room_id, opp_socket_id }: any) => {
+        SocketService.listenForOpponentJoining().then(({ room_id, opp_socket_id }: any) => {
           console.log("Opponent joined " + room_id + "  " + opp_socket_id);
           this.props.update_opponent_join(true);
         })
@@ -106,7 +107,9 @@ class Board extends React.Component<IBoardProps> {
 
     };
   }
-
+  closeGamePopup() {
+    
+  }
   changePlayer() {
     let cur_player = this.props.current_player;
     if (cur_player === 1) this.props.change_current_player(0);

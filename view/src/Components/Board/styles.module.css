@@ -8,7 +8,6 @@
 }
 .board {
   width: fit-content;
-  margin-top: 5rem;
 }
 .container .board .column {
   display: flex;
