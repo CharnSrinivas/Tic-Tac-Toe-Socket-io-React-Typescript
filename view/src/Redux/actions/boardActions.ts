@@ -29,3 +29,15 @@ export function update_scores(scores: { '1': number, '0': number }) {
 export function change_is_playing(is_playing:boolean){
     return{type:actions.CHANGE_IS_PLAYING,payload:{is_playing}}
 }
+export function update_opponent_join(opponent_joined:boolean){
+    return{type:actions.UPDATE_OPPONENT_JOIN,payload:{opponent_joined}}
+}
+export function set_winner(winner:player)
+{
+    return{type:actions.SET_WINNER,payload:{winner}}
+}
+// export function reset_board()
+// {
+    
+//     return{type:actions.RESET_BOARD,payload:{board:BoardInitialState()}}
+// }

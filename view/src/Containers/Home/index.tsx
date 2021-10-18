@@ -2,7 +2,7 @@ import { Component } from 'react';
 import styles from './styles.module.css';
 import Popup from '../../Components/Popup';
 import { stateModel } from '../../Redux/Reducers/initialStates';
-import { change_player, change_current_player } from '../../Redux/actions/boardActions';
+import { change_player, change_current_player ,update_opponent_join} from '../../Redux/actions/boardActions';
 import { setGameId } from '../../Redux/actions/gameActions';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -18,7 +18,8 @@ interface State {
 const mapStateToProps = (state: stateModel) => {
     return {
         board: state.board.board,
-        current_player: state.board.player
+        current_player: state.board.player,
+        opponent_joined:state.board.opponent_joined
     };
 };
 
@@ -26,7 +27,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         change_player: (player: 1 | 0) => dispatch(change_player(player)),
         change_current_player: (current_player: 1 | -1 | 0) => dispatch(change_current_player(current_player)),
-        setGameId: (game_id: string) => dispatch(setGameId(game_id))
+        setGameId: (game_id: string) => dispatch(setGameId(game_id)),
+        update_opponent_join: (is_joined: boolean) => dispatch(update_opponent_join(is_joined))
     };
 };
 
@@ -63,6 +65,7 @@ const JoinGamePopup = connect(mapStateToProps, mapDispatchToProps)
                 props.setGameId(game_id);
                 props.change_player(0);
                 // saveGameState();
+                props.update_opponent_join(true);
                 props.history.push('/game')
             }
         }

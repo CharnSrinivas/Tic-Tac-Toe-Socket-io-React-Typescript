@@ -40,6 +40,22 @@ class SocketService {
             }
         })
     }
+    listenForOpponentJoining(){
+        return new Promise((res,rej)=>{
+            if (this.socket) {
+                try {
+                    this.socket.on(eveNames.opponent_joined,(room_id,opponent_socket_id)=>{
+                        res({room_id,opponent_socket_id});
+                    });
+                    this.socket.on('error', (err) => rej(err));
+                } catch (error) {
+                    rej(error);
+                }
+            } else {
+                rej("Socket obj is null!");
+            }
+        })
+    }
     joinRoom(game_id: string,onRoomJoin?:Function) {
         return new Promise((res, rej) => {
             const onJoin = () => {

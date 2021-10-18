@@ -1,1 +1,1 @@
-export const server_socket_url = 'http://localhost:5000'
+export const server_socket_url = 'http://192.168.43.1:5000'

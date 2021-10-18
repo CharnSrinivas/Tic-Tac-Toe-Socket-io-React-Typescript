@@ -17,6 +17,7 @@ io.on('connection', (socket: Socket) => {
                 let room_size = io.sockets.adapter.rooms.get(room_id)!.size;
                 if (room_size <= 2) {
                     socket.join(room_id);
+                    socket.broadcast.emit(eve_names.opponent_joined,room_id,socket.id)
                 } else {
                 }
             } else {
@@ -45,6 +46,7 @@ io.on('connection', (socket: Socket) => {
     socket.on(eve_names.close_game,
         async (room_id, player: number, onLeft?: Function) => {
             socket.broadcast.to(room_id).emit(eve_names.player_left, player);
+            
             socket.disconnect();
             if (onLeft) onLeft();
             // console.log(await io.sockets.in(room_id).allSockets())

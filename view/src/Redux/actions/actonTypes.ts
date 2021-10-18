@@ -3,6 +3,8 @@ export const CHANGE_CURRENT_PLAYER = 'change-current-player';
 export const UPDATE_BOARD = 'update-board';
 export const UPDATE_SCORES = 'update-scores'
 export const CHANGE_IS_PLAYING = 'change-is-playing';
-
 export const SET_GAME_ID = 'set-game-id';
 export const UPDATE_FULL_STATE = 'update-full-state';
+export const UPDATE_OPPONENT_JOIN='update-opponent-join';
+export const SET_WINNER = 'set-winner';
+export const RESET_BOARD = 'reset-board';

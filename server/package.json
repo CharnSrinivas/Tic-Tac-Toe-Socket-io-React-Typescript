@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "tsc": "tsc",
     "postinstall": "npm run tsc",
-    "dev":"nodemon index.ts"
+    "dev":"nodemon src/index.ts"
   },
   "author": "CharanSrinivas",
   "license": "ISC",

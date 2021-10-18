@@ -10,7 +10,9 @@ export const BoardInitialState = ():BoardStateModel => {
     board:[-1,-1,-1,-1,-1,-1,-1,-1,-1],
     current_player:1,
     scores:{"1":0,"0":0},
-    is_playing:false
+    is_playing:false,
+    opponent_joined:false,
+    winner:-1
     }
 }
 export interface BoardStateModel{
@@ -19,6 +21,8 @@ export interface BoardStateModel{
     current_player:player;
     scores:{'1':number,'0':number};
     is_playing:boolean;
+    opponent_joined:boolean;
+    winner:player;
 }
 
 export const GameInitialState =() :GameStateModel=>{

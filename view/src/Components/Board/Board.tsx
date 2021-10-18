@@ -2,10 +2,8 @@ import React from 'react';
 import styles from './styles.module.css';
 import { stateModel } from '../../Redux/Reducers/initialStates';
 import { Dispatch } from 'redux';
-// import { BoardStateModel } from '../../Redux/Reducers/initialStates';
-
 import { server_socket_url } from '../../config'
-import { update_board, change_player, change_current_player, update_scores, change_is_playing } from '../../Redux/actions/boardActions';
+import { update_board,set_winner, change_player, change_current_player, update_scores, change_is_playing, update_opponent_join } from '../../Redux/actions/boardActions';
 import SocketService from '../../Utils/Services/Socket/SocketService';
 import { connect } from 'react-redux';
 import { Board as board, player } from '../../gameModels';
@@ -15,8 +13,6 @@ import { checkBoard } from '../../Utils/Utils';
 
 
 export interface IBoardProps {
-  [x: string]: any;
-
   board: board;
   player: number;
   current_player: player;
@@ -24,21 +20,31 @@ export interface IBoardProps {
   is_playing: boolean;
   update_board: Function;
   game_id: string;
+  opponent_joined: boolean;
+  winner:player;
   change_player: Function;
   change_current_player: Function;
   update_scores: Function;
   change_is_playing: Function;
+  update_opponent_join: Function;
+  set_winner:Function;
+
+}
+
+export interface IBoardState {
+  won: player
 }
 
 const mapStateToProps = (state: stateModel) => {
-
   return {
     board: state.board.board,
     player: state.board.player,
     current_player: state.board.current_player,
     scores: state.board.scores,
     is_playing: state.board.is_playing,
-    game_id: state.game.game_id
+    game_id: state.game.game_id,
+    opponent_joined: state.board.opponent_joined,
+    winner:state.board.winner
   };
 };
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -47,29 +53,25 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     change_player: (player: 0 | 1) => dispatch(change_player(player)),
     change_current_player: (current_player: player) => dispatch(change_current_player(current_player)),
     update_scores: (scores: { '1': number, '0': number }) => dispatch(update_scores(scores)),
-    change_is_playing: (is_playing: boolean) => dispatch(change_is_playing(is_playing))
+    change_is_playing: (is_playing: boolean) => dispatch(change_is_playing(is_playing)),
+    update_opponent_join: (is_joined: boolean) => dispatch(update_opponent_join(is_joined)),
+    set_winner:(winner:player)=>dispatch(set_winner(winner))
   };
 };
-
-
-
-
 const BoardCell = connect(mapStateToProps, mapDispatchToProps)((props: any): JSX.Element => {
-
   const updateBoard = () => {
-
     let board = [...props.board];
     if (board[props.index] === -1 && props.is_playing && props.player === props.current_player) {
-
       board[props.index] = props.player;
       props.update_board(board);
       SocketService.makeMove(props.player, props.index, props.game_id);
-
     }
-
   }
+  let can_click = props.is_playing && props.board[props.index] === -1 ? true : false;
+  
+
   return (
-    <div className={styles['cell']} onClick={updateBoard}>
+    <div className={styles['cell']} onClick={updateBoard} data-canclick={can_click}>
       {
         props.board[props.index] === 1 &&
         <XIcon />
@@ -78,23 +80,31 @@ const BoardCell = connect(mapStateToProps, mapDispatchToProps)((props: any): JSX
         props.board[props.index] === 0 &&
         <OIcon />
       }
-
     </div>
   )
 })
 
-
-
 class Board extends React.Component<IBoardProps> {
   constructor(props: any) {
+
     super(props);
-    this.props.change_is_playing(true);
+
     SocketService.connect(server_socket_url).then(() => {
       SocketService.joinRoom(this.props.game_id).then(() => {
+        this.props.change_is_playing(true);
+          SocketService.listenForOpponentJoining().then(({ room_id, opp_socket_id }: any) => {
+          console.log("Opponent joined " + room_id + "  " + opp_socket_id);
+          this.props.update_opponent_join(true);
+        })
         this.listenForMove();
-
       })
     })
+    // ? Stopping user to go back;
+    window.history.pushState(null, "", window.location.href);
+    window.onpopstate = () => {
+      window.history.pushState(null, "", window.location.href);
+
+    };
   }
 
   changePlayer() {
@@ -102,17 +112,15 @@ class Board extends React.Component<IBoardProps> {
     if (cur_player === 1) this.props.change_current_player(0);
     else if (cur_player === 0) this.props.change_current_player(1);
   }
-
   listenForMove() {
     SocketService.listenForMove().then(({ player, pos, room_id }) => {
       console.log(player, pos, room_id);
       let new_board = this.props.board;
       new_board[pos] = player;
       this.props.update_board(new_board);
-
       this.changePlayer();
       this.listenForMove();
-    }).catch(e => { console.log(e) })
+    }).catch(e => { console.log(e); this.props.update_opponent_join(false); })
   }
 
   componentDidUpdate() {
@@ -123,25 +131,56 @@ class Board extends React.Component<IBoardProps> {
       case 0:
         new_scores['0'] += 1; this.props.update_scores(new_scores);
         this.props.change_is_playing(false);
+        this.props.set_winner(0);
         break;
       case 1:
         new_scores['1'] += 1; this.props.update_scores(new_scores);
         this.props.change_is_playing(false);
+        this.props.set_winner(1);
         break;
     }
   }
 
-  canplay(){
-    if(this.props.is_playing){
-      if(this.props.current_player === this.props.player){return 'true'}
-    }
-    return 'false';
-  }
-  public render() {
 
+  get_winner_banner() {
+    if (this.props.winner === -1) return null;
+    if (this.props.winner === this.props.player) {
+      return (
+        <div className={styles['winner-banner-container']}>
+          <div className={styles['winner-banner-wrapper']}>
+            <h1>You won.</h1>
+          </div>
+        </div>
+
+      )
+    } else {
+      return (
+        <div className={styles['winner-banner-container']}>
+          <div className={styles['winner-banner-wrapper']}>
+
+            <h1>You loose.</h1>
+          </div>
+        </div>
+
+      )
+    }
+  }
+
+  public render() {
     return (
       <div className={styles['container']}>
-        <div className={styles['board']} data-canplay={this.canplay()}>
+        {
+          !this.props.opponent_joined
+          &&
+          <div className={styles['player-waiting-container']}>
+            <div className={styles['player-waiting-wrapper']}>
+              <h1>Opponent joining ...</h1>
+              <h3>Game Id: {this.props.game_id}</h3>
+            </div>
+          </div>
+        }
+        {this.get_winner_banner()}
+        <div className={styles['board']} >
           {
             this.props.board.length === 9 &&
             <>
