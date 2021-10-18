@@ -35,4 +35,4 @@
 /view/package-lock.json
 /server/package-lock.json
 
-/..generate-file-trees.sh
+/.generate-file-trees.sh
