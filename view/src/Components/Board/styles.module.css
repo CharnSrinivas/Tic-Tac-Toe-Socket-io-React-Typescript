@@ -36,17 +36,10 @@
 }
 
 .vr-line {
-<<<<<<< HEAD
     border-radius: 25px;
     background-color: hsl(0, 0%, 90%);
-    height: 100%;
+    height: inherit;
     width: 2px;
-=======
-  border-radius: 25px;
-  background-color: hsl(0, 0%, 90%);
-  height:100%;
-  width: 2px;
->>>>>>> f39272f3b3e8b791715e91c7935e6f292b53df9d
 }
 
 .hr-line {
