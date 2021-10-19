@@ -58,12 +58,23 @@ self.addEventListener(
         )
     }
 )
-
-
-
 self.addEventListener(
     'fetch', (event) => {
-        let res = fetchHandler(event);
-        event.respondWith(res);
+        event.respondWith(async function() {
+            const cachedResponse = await caches.match(event.request);
+            if (cachedResponse) return cachedResponse;
+            return fetch(event.request).then(updateCache(event.request));
+        }());
     }
 )
+
+function updateCache(request) {
+    return caches.open(cache_name).then(cache => {
+        return fetch(request).then(response => {
+            const resClone = response.clone();
+            if (response.status < 400)
+                return cache.put(request, resClone);
+            return response;
+        });
+    });
+}
