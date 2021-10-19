@@ -1,12 +1,9 @@
 const cache_name = 'cache-v1'
 const static_files = [
-
     'index.html',
-    'logo192.png',
-    'logo512.png',
-    'favicon.ico'
+    'logo.png',
 ];
-const CACHE_LIMIT = 10;
+const CACHE_LIMIT = 35;
 
 function limitCache(limit, cache_name) {
     caches.open(cache_name).then((cache) => {
@@ -34,22 +31,22 @@ function fetchAndAddtoCache(event) {
 }
 
 
-function fetchHandler(event){
+function fetchHandler(event) {
     return caches.match(event.request)
-    .then((cache_res) => {
-        //? To refresh the cache item 
-        //? Performance may decreases
-        if (cache_res)
-            return cache_res;
-        else {
-            fetch(event.request).then(fetch_res=>{
-                return caches.open(cache_name).then(cache=>{
-                    cache.put(event.request.url,fetch_res.clone());
-                    return fetch_res;
+        .then((cache_res) => {
+            //? To refresh the cache item 
+            //? Performance may decreases
+            if (cache_res)
+                return cache_res;
+            else {
+                fetch(event.request).then(fetch_res => {
+                    return caches.open(cache_name).then(cache => {
+                        cache.put(event.request.url, fetch_res.clone());
+                        return fetch_res;
+                    })
                 })
-            })
-        }
-    })
+            }
+        })
 }
 
 self.addEventListener(

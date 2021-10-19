@@ -1,37 +1,36 @@
-@font-face{
-  font-family: 'game-font-regular';
-  src: url('./assets/fonts/ComicNeue-Regular.ttf');
-  
-}
-@font-face{
-  font-family: 'game-font-bold';
-  src:url('./assets/fonts/ComicNeue-Bold.ttf') ;
-
-}
-:root{
-  --bg-color:hsl(216, 18%, 16%);
-  --primary-color:hsl(183, 100%, 35%);
-  --secondary-color:hsl(217, 10%, 25%);
-  --primary-color-hue:183;
-  --primary-color-sat:100%;
-  --primary-color-lit:35%;
+@font-face {
+    font-family: 'game-font-regular';
+    src: url('./assets/fonts/ComicNeue-Regular.ttf');
 }
 
+@font-face {
+    font-family: 'game-font-bold';
+    src: url('./assets/fonts/ComicNeue-Bold.ttf');
+}
+
+:root {
+    --bg-color: hsl(216, 18%, 16%);
+    --primary-color: hsl(183, 100%, 35%);
+    --secondary-color: hsl(217, 10%, 25%);
+    --primary-color-hue: 183;
+    --primary-color-sat: 100%;
+    --primary-color-lit: 35%;
+}
 
 body {
-  margin: 0;
-  font-family: 'game-font-regular',cursive;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width:100vw;
-  height: 100vh;
-  overflow: hidden;
+    margin: 0;
+    font-family: 'game-font-regular', cursive;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
-*{
-  box-sizing: border-box;
-  margin: 0;
-  padding:0;
-  user-select: none;
-  user-zoom: 0;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    user-zoom: 0;
 }
