@@ -51,6 +51,7 @@ function fetchHandler(event) {
 
 self.addEventListener(
     'install', (event) => {
+        console.log('fuck');
         event.waitUntil(
             caches.open(cache_name).then((cache) => {
                 cache.addAll(static_files);
@@ -59,22 +60,24 @@ self.addEventListener(
     }
 )
 self.addEventListener(
-    'fetch', (event) => {
-        event.respondWith(async function() {
-            const cachedResponse = await caches.match(event.request);
-            if (cachedResponse) return cachedResponse;
-            return fetch(event.request).then(updateCache(event.request));
-        }());
-    }
-)
-
+        'fetch', (event) => {
+            event.respondWith(async function() {
+                console.log(event);
+                const cachedResponse = await caches.match(event.request);
+                if (cachedResponse) return cachedResponse;
+                return fetch(event.request).then(() => updateCache(event.request));
+            }());
+        }
+    )
+    //
 function updateCache(request) {
+    // return (null)
     return caches.open(cache_name).then(cache => {
         return fetch(request).then(response => {
             const resClone = response.clone();
             if (response.status < 400)
                 return cache.put(request, resClone);
             return response;
-        });
+        }).catch(e => { console.log(e); });
     });
 }
