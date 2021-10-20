@@ -1,12 +1,13 @@
-const cache_name = 'cache-v1'
+const cache_name = 'cache-v1';
 const static_files = [
-
-    'index.html',
-    'logo192.png',
-    'logo512.png',
-    'favicon.ico'
+    '/',
+    // '/static/js/bundle.js',
+    // '/static/js/vendors~main.js',
+    // '/static/js/bundle.chunk.js',
+    // '/static/js/main.chunk.js',
+    '/logo.png',
 ];
-const CACHE_LIMIT = 10;
+const CACHE_LIMIT = 35;
 
 function limitCache(limit, cache_name) {
     caches.open(cache_name).then((cache) => {
@@ -22,51 +23,44 @@ function limitCache(limit, cache_name) {
     })
 }
 
-function fetchAndAddtoCache(event) {
-    return fetch(event.request).then(fetch_res => {
-        let res_copy = fetch_res.clone();
-        caches.open(cache_name)
-            .then(cache => {
-                cache.put(event.request.url, res_copy);
-                limitCache(CACHE_LIMIT, cache_name);
-            })
-    })
-}
 
 
-function fetchHandler(event){
-    return caches.match(event.request)
-    .then((cache_res) => {
-        //? To refresh the cache item 
-        //? Performance may decreases
-        if (cache_res)
-            return cache_res;
-        else {
-            fetch(event.request).then(fetch_res=>{
-                return caches.open(cache_name).then(cache=>{
-                    cache.put(event.request.url,fetch_res.clone());
-                    return fetch_res;
-                })
-            })
-        }
-    })
-}
 
 self.addEventListener(
     'install', (event) => {
-        event.waitUntil(
-            caches.open(cache_name).then((cache) => {
-                cache.addAll(static_files);
-            }).then(() => self.skipWaiting())
+        console.log("installing service work")
+        event.waitUntil(async function () {
+            const cache = await caches.open(cache_name)
+            await cache.addAll(static_files);
+            self.skipWaiting();
+            console.log("added files ");
+        }()
         )
     }
 )
-
-
-
 self.addEventListener(
     'fetch', (event) => {
-        let res = fetchHandler(event);
-        event.respondWith(res);
+        if(event.request.method==='GET' && !event.request.url.includes('socket.io'))
+        
+        {event.respondWith(fetchResponse(event));}
     }
 )
+//
+async function fetchResponse(event){
+    console.log(event);
+    const cachedResponse = await caches.match(event.request);
+    if (cachedResponse) {console.log("Cached Response");;return cachedResponse;}
+    //? Do offline and no-cache stuff
+    return fetch(event.request)
+    .then(res=>{
+        let res_clone = res.clone();
+        if(res.status > 400){return res;}
+
+        return caches.open(cache_name).then(async (cache)=>{
+            await cache.put(event.request,res_clone)
+            return res
+
+        })
+    });
+
+}

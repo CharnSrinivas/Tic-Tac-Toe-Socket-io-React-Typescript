@@ -10,11 +10,12 @@ import { Board as board, player } from '../../gameModels';
 import { ReactComponent as XIcon } from '../../assets/player-icons/x.svg';
 import { ReactComponent as OIcon } from '../../assets/player-icons/o.svg';
 import { checkBoard } from '../../Utils/Utils';
+import Popup from '../Popup'
 
 
 export interface IBoardProps {
   board: board;
-  player: number;
+  player: player;
   current_player: player;
   scores: { '1': number, '0': number }
   is_playing: boolean;
@@ -28,11 +29,10 @@ export interface IBoardProps {
   change_is_playing: Function;
   update_opponent_join: Function;
   set_winner: Function;
-
 }
 
 export interface IBoardState {
-  close_game: boolean;
+  close_game: boolean
 }
 
 const mapStateToProps = (state: stateModel) => {
@@ -88,8 +88,10 @@ class Board extends React.Component<IBoardProps, IBoardState> {
   constructor(props: any) {
 
     super(props);
-    this.state = { close_game: false }
-
+    this.state = {
+      close_game: false
+    }
+    console.log(server_socket_url)
     SocketService.connect(server_socket_url).then(() => {
       SocketService.joinRoom(this.props.game_id).then(() => {
         this.props.change_is_playing(true);
@@ -100,22 +102,20 @@ class Board extends React.Component<IBoardProps, IBoardState> {
         this.listenForMove();
       })
     })
-    // ? Stopping user to go back;
     window.history.pushState(null, "", window.location.href);
-    window.onpopstate = () => {
-      window.history.pushState(null, "", window.location.href);
-
-    };
+    // ? Stopping user to go back;\
+    window.addEventListener('popstate',this.listenForBackBtn,true)
   }
-  closeGamePopup() {
-    
+  listenForBackBtn = ()=>{
+    window.history.pushState(null, "", window.location.href);
+    this.setState({ close_game: true });
   }
-  changePlayer() {
+  changePlayer=()=> {
     let cur_player = this.props.current_player;
     if (cur_player === 1) this.props.change_current_player(0);
     else if (cur_player === 0) this.props.change_current_player(1);
   }
-  listenForMove() {
+  listenForMove=()=> {
     SocketService.listenForMove().then(({ player, pos, room_id }) => {
       console.log(player, pos, room_id);
       let new_board = this.props.board;
@@ -126,7 +126,7 @@ class Board extends React.Component<IBoardProps, IBoardState> {
     }).catch(e => { console.log(e); this.props.update_opponent_join(false); })
   }
 
-  componentDidUpdate() {
+  componentDidUpdate=()=> {
     console.log(this.props);
     const new_scores = this.props.scores;
     let board = this.props.board;
@@ -144,8 +144,7 @@ class Board extends React.Component<IBoardProps, IBoardState> {
     }
   }
 
-
-  get_winner_banner() {
+  get_winner_banner=()=> {
     if (this.props.winner === -1) return null;
     if (this.props.winner === this.props.player) {
       return (
@@ -169,9 +168,48 @@ class Board extends React.Component<IBoardProps, IBoardState> {
     }
   }
 
+  onGameExit=()=>{
+    SocketService.close_game(this.props.game_id,this.props.player).finally(()=>{
+      window.removeEventListener('popstate',this.listenForBackBtn,true); 
+      window.history.back();     
+    })
+    
+  }
+  closeGamePopup() {
+    if (!this.state.close_game) return null;
+    return (
+      <Popup
+        content={
+          <div className={styles['close-game-container']}>
+            <h2>Are you sure to exit the game.</h2>
+            <div className={styles['btn-container']}>
+              <div className={styles['positive-btn']}
+               onClick={this.onGameExit}>Exit
+               </div>
+              <div className={styles['negative-btn']} onClick={() => { this.setState({ close_game: false }) }}>Cancel</div>
+            </div>
+          </div>}
+        onExit={() => { this.setState({ close_game: false }) }} />
+    )
+  }
+  displayTurn=()=>{
+    if(this.props.current_player === this.props.player && this.props.is_playing){
+      return(<div className={styles['display-turn-container']}>
+        <h2>Yours turn.</h2>
+      </div>)
+    }
+    else if(this.props.current_player !== this.props.player && this.props.is_playing){
+      return(<div className={styles['display-turn-container']}>
+        <h2>Opponent turn</h2>
+      </div>)
+    }else{
+      return (<div className={styles['display-turn-container']}></div>)
+    }
+  }
   public render() {
     return (
       <div className={styles['container']}>
+
         {
           !this.props.opponent_joined
           &&
@@ -183,6 +221,8 @@ class Board extends React.Component<IBoardProps, IBoardState> {
           </div>
         }
         {this.get_winner_banner()}
+        {this.closeGamePopup()}
+        {this.displayTurn()}
         <div className={styles['board']} >
           {
             this.props.board.length === 9 &&
@@ -216,6 +256,7 @@ class Board extends React.Component<IBoardProps, IBoardState> {
       </div>
     );
   }
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);
