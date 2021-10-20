@@ -1,1 +1,1 @@
-export const server_socket_url = 'http://192.168.43.1:5000'
+export const server_socket_url = 'https://cs-tic-tac-toe-socket-api.herokuapp.com/'
