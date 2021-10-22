@@ -1,5 +1,9 @@
 ./server
+<<<<<<< HEAD
 ├── dist
+=======
+├── build
+>>>>>>> e08935dc73310f8a631471c2d87a14da87974a88
 │   ├── app.js
 │   ├── eventNames.js
 │   ├── index.js

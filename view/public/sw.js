@@ -1,10 +1,17 @@
 const cache_name = 'cache-v1';
 const static_files = [
     '/',
+<<<<<<< HEAD
     '/static/js/bundle.js',
     '/static/js/vendors~main.js',
     '/static/js/bundle.chunk.js',
     '/static/js/main.chunk.js',
+=======
+     '/static/js/bundle.js',
+     '/static/js/vendors~main.js',
+     '/static/js/bundle.chunk.js',
+     '/static/js/main.chunk.js',
+>>>>>>> e08935dc73310f8a631471c2d87a14da87974a88
     '/logo.png',
 ];
 const CACHE_LIMIT = 35;
@@ -38,7 +45,10 @@ self.addEventListener(
         )
     }
 )
+<<<<<<< HEAD
 //👷
+=======
+>>>>>>> e08935dc73310f8a631471c2d87a14da87974a88
 self.addEventListener(
     'fetch', (event) => {
         if(event.request.method==='GET' && !event.request.url.includes('socket.io'))
@@ -64,4 +74,8 @@ async function fetchResponse(event){
         })
     });
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e08935dc73310f8a631471c2d87a14da87974a88
