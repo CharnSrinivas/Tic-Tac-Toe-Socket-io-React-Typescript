@@ -1,0 +1,18 @@
+./server
+├── dist
+│   ├── app.js
+│   ├── eventNames.js
+│   ├── index.js
+│   ├── interfaces.js
+│   └── socket.js
+├── package.json
+├── package-lock.json
+├── src
+│   ├── app.ts
+│   ├── eventNames.ts
+│   ├── index.ts
+│   ├── interfaces.ts
+│   └── socket.ts
+└── tsconfig.json
+
+2 directories, 13 files
