@@ -120,7 +120,7 @@ const mapStateToProps = (state: stateModel) => {
   
     public render() {
       return (
-        <div className={styles['container']}>
+        <div className={styles['board-container']}>
   
   
           <div className={styles['board']} >

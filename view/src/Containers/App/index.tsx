@@ -1,7 +1,7 @@
 import React from 'react';
 import Home from '../Home'
 import {BrowserRouter as Router ,Switch,Route} from 'react-router-dom'
-import Board from '../Game/Game';
+import Game from '../Game';
 export interface IAppProps {
 }
 
@@ -15,7 +15,7 @@ super(props);
     <Router>
       <Switch>
         
-        <Route path='/game'  exact component={Board}/>
+        <Route path='/game'  exact component={Game}/>
         <Route path='/' exact component={Home}/>
       </Switch>
     </Router>

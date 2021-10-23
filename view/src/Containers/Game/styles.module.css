@@ -1,11 +1,16 @@
-.container {
+.game-container{
+
     width: 100vw;
     height: 100vh;
+    background-color: var(--bg-color);
+    padding: 1rem;
+}
+.board-container {
+    /* width:inherit;
+    height:inherit; */
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--bg-color);
-    padding: 1rem;
 }
 
 .board {
@@ -13,7 +18,7 @@
     margin-top: 5rem;
 }
 
-.container .board .column {
+.board-container .board .column {
     display: flex;
     width: fit-content;
 }
@@ -63,6 +68,10 @@
     position: absolute;
     height: 100vh;
     width: 100vw;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -139,11 +148,30 @@
 
 .display-turn-container h2 {
     font-family: 'game-font-bold';
-    color: hsl(0, 0%, 80%)
+    color: hsl(0, 0%, 80%);
+    text-align: center;
 }
 
 .display-turn-container {
     margin-top: 1rem;
     font-size: 1.1rem;
     height: 2rem;
+}
+.back-btn svg {
+    stroke: hsl(9, 75%, 60%);
+    stroke-width: 3rem;
+}
+.back-btn{
+    position:absolute;
+    top:1rem;
+    left:0.6rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(0.6rem,1rem);
+    width:fit-content;
+    border-radius: 5px;
+    padding:0.3rem 0.5rem;
+    box-shadow:inset 1px 4px 2.5px 0px hsla(0,0%,50%,0.4) , inset -2px -2px 2.5px 0px hsla(0,0%,10%);
+    
 }

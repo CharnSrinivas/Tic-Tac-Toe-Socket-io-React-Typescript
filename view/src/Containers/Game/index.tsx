@@ -3,15 +3,13 @@ import styles from './styles.module.css';
 import { stateModel } from '../../Redux/Reducers/initialStates';
 import { Dispatch } from 'redux';
 import { update_board, set_winner, change_player, change_current_player, update_scores, change_is_playing, update_opponent_join } from '../../Redux/actions/boardActions';
-import SocketService from '../../Utils/Services/Socket/SocketService';
 import { connect } from 'react-redux';
-import { Board as board, player } from '../../gameModels';
-import { ReactComponent as XIcon } from '../../assets/player-icons/x.svg';
-import { ReactComponent as OIcon } from '../../assets/player-icons/o.svg';
+import { player } from '../../gameModels';
 import Popup from '../../Components/Popup'
-import { GameProps,GameState } from './GameInterface';
+import { GameProps, GameState } from './GameInterface';
 import Board from './Board';
-
+import SocketService from '../../Utils/Services/Socket/SocketService';
+import { ReactComponent as BackArrowIco } from '../../assets/icons/back_arrow.svg'
 const mapStateToProps = (state: stateModel) => {
   return {
     board: state.board.board,
@@ -36,25 +34,29 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-class Game  extends React.Component<GameProps, GameState>{
+class Game extends React.Component<GameProps, GameState>{
 
-  constructor(props:any){
+  constructor(props: any) {
     super(props);
+    this.state = { close_game: false }
     window.history.pushState(null, "", window.location.href);
-      // ? Stopping user to go back;\
-      window.addEventListener('popstate', this.listenForBackBtn, true)
+    // ? Stopping user to go back;\
+    window.addEventListener('popstate', this.listenForBackBtn, true)
+    console.log(this.props);
+    
   }
-  
+
   listenForBackBtn = () => {
     window.history.pushState(null, "", window.location.href);
     this.setState({ close_game: true });
   }
-  
+
   onGameExit = async () => {
-    // await SocketService.close_game(this.props.game_id, this.props.player).finally(() => { console.log("close game") })
-    // this.setState({listen_for_back_btn:false});
-    window.removeEventListener('popstate', this.listenForBackBtn, true);
+    SocketService.close_game(this.props.game_id, this.props.player).then(() => { console.log("close game") }).catch(()=>{console.log("close game error")})
+    window.removeEventListener('popstate', this.listenForBackBtn, true);    
+    if(process.env .PUBLIC_URL)window.location.href = process.env .PUBLIC_URL;
     window.history.back();
+    
   }
   displayTurn = () => {
     if (this.props.current_player === this.props.player && this.props.is_playing) {
@@ -73,16 +75,16 @@ class Game  extends React.Component<GameProps, GameState>{
 
   get_winner_banner = () => {
     if (this.props.winner === -1) return null;
-          return (
-        <div className={styles['winner-banner-container']}>
-          <div className={styles['winner-banner-wrapper']}>
+    return (
+      <div className={styles['winner-banner-container']}>
+        <div className={styles['winner-banner-wrapper']}>
 
-            {this.props.winner === this.props.player ? <h1>You Won.</h1> : <h1>You Loose.</h1>}
-          </div>
+          {this.props.winner === this.props.player ? <h1>You Won.</h1> : <h1>You Loose.</h1>}
         </div>
+      </div>
 
-      )
-    
+    )
+
   }
 
   closeGamePopup() {
@@ -94,7 +96,9 @@ class Game  extends React.Component<GameProps, GameState>{
             <h2>Are you sure to exit the game.</h2>
             <div className={styles['btn-container']}>
               <div className={styles['positive-btn']}
-                onClick={this.onGameExit}>Exit
+                onClick={this.onGameExit}
+              >
+                Exit
               </div>
               <div className={styles['negative-btn']} onClick={() => { this.setState({ close_game: false }) }}>Cancel</div>
             </div>
@@ -102,11 +106,17 @@ class Game  extends React.Component<GameProps, GameState>{
         onExit={() => { this.setState({ close_game: false }) }} />
     )
   }
-
+  back_btn = () => {
+    return (
+    <div className={styles['back-btn']} onClick={()=>{this.setState({close_game:true})}}>
+      <BackArrowIco/>
+    </div>)
+  }
   render() {
 
     return (
-      <>
+      <div className={styles['game-container']}>
+
         {
           !this.props.opponent_joined
           &&
@@ -117,11 +127,12 @@ class Game  extends React.Component<GameProps, GameState>{
             </div>
           </div>
         }
+        {this.back_btn()}
         {this.get_winner_banner()}
         {this.closeGamePopup()}
         {this.displayTurn()}
-        <Board/>
-      </>
+        <Board />
+      </div>
     )
   }
 }
