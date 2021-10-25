@@ -13,8 +13,7 @@ super(props);
     
     return (
     <Router>
-      <Switch>
-        
+      <Switch>  
         <Route path='/game'  exact component={Game}/>
         <Route path='/' exact component={Home}/>
       </Switch>

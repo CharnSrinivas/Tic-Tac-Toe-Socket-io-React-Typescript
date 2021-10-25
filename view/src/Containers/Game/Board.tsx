@@ -71,37 +71,11 @@ const mapStateToProps = (state: stateModel) => {
       this.state = {
         close_game: false
       }
-      SocketService.connect(server_socket_url).then(() => {
-        SocketService.joinRoom(this.props.game_id).then(() => {
-          this.props.change_is_playing(true);
-          SocketService.listenForOpponentJoining().then(({ room_id, opp_socket_id }: any) => {
-            console.log("Opponent joined " + room_id + "  " + opp_socket_id);
-            this.props.update_opponent_join(true);
-          })
-          this.listenForMove();
-        })
-      })
       
     }
-    
-    changePlayer = () => {
-      let cur_player = this.props.current_player;
-      if (cur_player === 1) this.props.change_current_player(0);
-      else if (cur_player === 0) this.props.change_current_player(1);
-    }
-    listenForMove = () => {
-      SocketService.listenForMove().then(({ player, pos, room_id }) => {
-        console.log(player, pos, room_id);
-        let new_board = this.props.board;
-        new_board[pos] = player;
-        this.props.update_board(new_board);
-        this.changePlayer();
-        this.listenForMove();
-      }).catch(e => { console.log(e); this.props.update_opponent_join(false); })
-    }
+
   
     componentDidUpdate = () => {
-      console.log(this.props);
       const new_scores = this.props.scores;
       let board = this.props.board;
       switch (checkBoard(board)) {
@@ -121,8 +95,6 @@ const mapStateToProps = (state: stateModel) => {
     public render() {
       return (
         <div className={styles['board-container']}>
-  
-  
           <div className={styles['board']} >
             {
               this.props.board.length === 9 &&
