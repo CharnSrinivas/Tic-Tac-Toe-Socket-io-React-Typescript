@@ -1,7 +1,7 @@
 import React from 'react';
 import Home from '../Home'
 import {BrowserRouter as Router ,Switch,Route} from 'react-router-dom'
-import Board from '../../Components/Board/Board';
+import Board from '../Game/Board';
 import swDev from '../../swDev';
 export interface IAppProps {
 }
