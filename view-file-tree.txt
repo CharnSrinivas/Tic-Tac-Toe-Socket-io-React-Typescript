@@ -42,6 +42,10 @@
 │   │   ├── index.ts
 │   │   └── initialStates.ts
 │   └── store.ts
+<<<<<<< HEAD
+├── swDev.ts
+=======
+>>>>>>> e08935dc73310f8a631471c2d87a14da87974a88
 └── Utils
     ├── Services
     │   └── Socket
@@ -49,4 +53,8 @@
     │       └── SocketService.ts
     └── Utils.ts
 
+<<<<<<< HEAD
+15 directories, 35 files
+=======
 15 directories, 34 files
+>>>>>>> e08935dc73310f8a631471c2d87a14da87974a88
