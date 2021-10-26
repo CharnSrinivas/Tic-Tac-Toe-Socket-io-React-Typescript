@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles.module.css';
+import { server_socket_url } from '../../config';
 import { stateModel } from '../../Redux/Reducers/initialStates';
 import { Dispatch } from 'redux';
 import { update_board, set_winner, change_player, change_current_player, update_scores, change_is_playing, update_opponent_join } from '../../Redux/actions/boardActions';
@@ -9,7 +10,9 @@ import Popup from '../../Components/Popup'
 import { GameProps, GameState } from './GameInterface';
 import Board from './Board';
 import SocketService from '../../Utils/Services/Socket/SocketService';
-import { ReactComponent as BackArrowIco } from '../../assets/icons/back_arrow.svg'
+import { ReactComponent as BackArrowIco } from '../../assets/icons/back_arrow.svg';
+import GameAudio from '../../Utils/Services/Audio/AudioService';
+
 const mapStateToProps = (state: stateModel) => {
   return {
     board: state.board.board,
@@ -38,26 +41,74 @@ class Game extends React.Component<GameProps, GameState>{
 
   constructor(props: any) {
     super(props);
-    this.state = { close_game: false }
-    window.history.pushState(null, "", window.location.href);
-    // ? Stopping user to go back;\
-    window.addEventListener('popstate', this.listenForBackBtn, true)
-    console.log(this.props);
-    
-  }
+    this.state = { close_game: false, opponent_exited: false }
+    // ?⛔🔙 Stopping user to go back;
 
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener('popstate', this.listenForBackBtn);
+
+    SocketService.connect(server_socket_url).then(() => {
+      SocketService.joinRoom(this.props.game_id).then(() => {
+        this.listenForPlayerExit();
+        this.props.change_is_playing(true);
+        SocketService.listenForOpponentJoining().then(({ room_id, opp_socket_id }: any) => {
+          console.log("Opponent joined " + room_id + "  " + opp_socket_id);
+          GameAudio.game_sounds.player_join?.play();
+          this.props.update_opponent_join(true);
+        })
+        this.listenForMove();
+      })
+    })
+
+  }
+  // ? --------- 📢🦻🦻 Game event listeners ------------------
   listenForBackBtn = () => {
-    window.history.pushState(null, "", window.location.href);
     this.setState({ close_game: true });
+    console.log('back btn');
+
+    window.history.pushState(null, "", window.location.href);
   }
 
-  onGameExit = async () => {
-    SocketService.close_game(this.props.game_id, this.props.player).then(() => { console.log("close game") }).catch(()=>{console.log("close game error")})
-    window.removeEventListener('popstate', this.listenForBackBtn, true);    
-    if(process.env .PUBLIC_URL)window.location.href = process.env .PUBLIC_URL;
-    window.history.back();
-    
+  listenForMove = () => {
+    SocketService.listenForMove().then(({ player, pos, room_id }) => {
+      console.log(player, pos, room_id);
+      let new_board = this.props.board;
+      new_board[pos] = player;
+      GameAudio.game_sounds.move?.play();
+      this.props.update_board(new_board);
+      this.changePlayer();
+      this.listenForMove();
+    }).catch(e => { console.log(e); this.props.update_opponent_join(false); })
   }
+
+  onGameExit = () => {
+
+    window.removeEventListener('popstate', this.listenForBackBtn);
+    SocketService.close_game(this.props.game_id, this.props.player)
+      .finally(() => {
+        console.log("close game")
+        if (process.env.PUBLIC_URL) { window.location.href = process.env.PUBLIC_URL; }
+
+        else { console.log("onexit"); window.history.back(); window.history.back(); }
+      })
+      .catch((e) => { console.log(e + "close game error") })
+  }
+  listenForPlayerExit = () => {
+    SocketService.listenForOpponentExit().then(() => {
+      console.log('exited');
+      this.setState({opponent_exited:true})
+    })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+  //?---------------------------------------------
+  changePlayer = () => {
+    let cur_player = this.props.current_player;
+    if (cur_player === 1) this.props.change_current_player(0);
+    else if (cur_player === 0) this.props.change_current_player(1);
+  }
+  //? -----------------------------------  Game components   -------------------------------------
   displayTurn = () => {
     if (this.props.current_player === this.props.player && this.props.is_playing) {
       return (<div className={styles['display-turn-container']}>
@@ -72,21 +123,27 @@ class Game extends React.Component<GameProps, GameState>{
       return (<div className={styles['display-turn-container']}></div>)
     }
   }
-
+  playerExit = () => {
+    if (this.state.opponent_exited) {
+      return (
+        <div className={styles['winner-banner-container']}>
+          <div className={styles['winner-banner-wrapper']}>
+            <h1>Opponent exited</h1>
+          </div>
+        </div>
+      )
+    }
+  }
   get_winner_banner = () => {
     if (this.props.winner === -1) return null;
     return (
       <div className={styles['winner-banner-container']}>
         <div className={styles['winner-banner-wrapper']}>
-
           {this.props.winner === this.props.player ? <h1>You Won.</h1> : <h1>You Loose.</h1>}
         </div>
       </div>
-
     )
-
   }
-
   closeGamePopup() {
     if (!this.state.close_game) return null;
     return (
@@ -108,10 +165,11 @@ class Game extends React.Component<GameProps, GameState>{
   }
   back_btn = () => {
     return (
-    <div className={styles['back-btn']} onClick={()=>{this.setState({close_game:true})}}>
-      <BackArrowIco/>
-    </div>)
+      <div className={styles['back-btn']} onClick={() => { this.setState({ close_game: true }) }}>
+        <BackArrowIco />
+      </div>)
   }
+  //?---------------------------------------------------------------
   render() {
 
     return (
@@ -127,10 +185,11 @@ class Game extends React.Component<GameProps, GameState>{
             </div>
           </div>
         }
-        {this.back_btn()}
         {this.get_winner_banner()}
-        {this.closeGamePopup()}
         {this.displayTurn()}
+        {this.playerExit()}
+        {this.closeGamePopup()}
+        {this.back_btn()}
         <Board />
       </div>
     )

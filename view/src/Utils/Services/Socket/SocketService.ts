@@ -4,12 +4,7 @@ import * as eveNames from './eventNames';
 // import store from '../../../Redux/store'
 class SocketService {
     socket: Socket | null = null;
-    moveListeners:Function[] =[];
-
-    addMoveListeners(func:Function){
-        this.moveListeners.push(func);
-    }
-
+    
     connect(url: string): Promise<Socket> {
         return new Promise((res, rej) => {
             let socket = io(url);
@@ -25,6 +20,7 @@ class SocketService {
             
         })
     }
+    // ?--------------------------- 🔊 👂👂 socket event Listeners  ---------------------------
     listenForMove():Promise<any>{
         return new Promise((res,rej)=>{
             if (this.socket) {
@@ -57,11 +53,26 @@ class SocketService {
             }
         })
     }
+    listenForOpponentExit(){
+        return new Promise((res, rej) => {
+          
+            if (this.socket) {
+                try {
+                    this.socket.on(eveNames.player_left,()=>{res(null)})
+                    this.socket.on('error', (err) => rej(err));
+                } catch (error) {
+                    rej(error);
+                }
+            } else {
+                rej("Socket obj is null!");
+            }
+        })
+    }
+    //? -------------------------------------------------------------------------------------------------------    
     joinRoom(game_id: string,onRoomJoin?:Function) {
         return new Promise((res, rej) => {
             const onJoin = () => {
                 res(this.socket);
-                console.log("********* Joined ************* ");
                 if(onRoomJoin)onRoomJoin();
             }
             if (this.socket) {
@@ -98,10 +109,10 @@ class SocketService {
     close_game(room_id:string,player:player,onClose?:Function){
         return new Promise((res, rej) => {
             const onclose = (props: any) => {
+                console.log('cmg..');
                 if(onClose)onClose();
-                res(props);
-                
-            }
+                res(props);           
+            };
             if (this.socket) {
                 try {
                     this.socket.emit(eveNames.close_game, room_id,player,onclose);

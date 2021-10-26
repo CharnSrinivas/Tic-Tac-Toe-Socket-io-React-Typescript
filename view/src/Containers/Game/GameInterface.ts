@@ -18,6 +18,6 @@ export interface GameProps {
   }
   
   export interface GameState {
-    close_game: boolean;
+    close_game: boolean;opponent_exited?:boolean;
   }
   

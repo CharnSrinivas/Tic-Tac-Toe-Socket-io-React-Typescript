@@ -1,12 +1,13 @@
 const cache_name = 'cache-v1';
+import { static_assets } from '../src/swDev'
 const static_files = [
     '/',
     '/static/js/bundle.js',
     '/static/js/vendors~main.js',
     '/static/js/bundle.chunk.js',
     '/static/js/main.chunk.js',
-
     '/logo.png',
+    ...static_assets
 ];
 const CACHE_LIMIT = 35;
 
