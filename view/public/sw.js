@@ -9,22 +9,6 @@ const static_files = [
     '/logo.png',
     ...static_assets
 ];
-const CACHE_LIMIT = 35;
-
-function limitCache(limit, cache_name) {
-    caches.open(cache_name).then((cache) => {
-
-        cache.keys().then(cache_keys => {
-
-            if (cache_keys.length > limit) {
-                cache.delete(cache_keys[0]).then(() => {
-                    limitCache(limit, cache_name);
-                })
-            } else { return; }
-        })
-    })
-}
-
 
 
 
@@ -56,11 +40,9 @@ async function fetchResponse(event) {
         .then(res => {
             let res_clone = res.clone();
             if (res.status > 400) { return res; }
-
             return caches.open(cache_name).then(async(cache) => {
                 await cache.put(event.request, res_clone)
                 return res
-
             })
         });
 
