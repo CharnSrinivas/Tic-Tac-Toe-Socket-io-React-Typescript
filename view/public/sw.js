@@ -1,5 +1,5 @@
 const cache_name = 'cache-v1';
-import { static_assets } from '../src/swDev'
+const {static_assets}  =require('../src/swDev')
 const static_files = [
     '/',
     '/static/js/bundle.js',

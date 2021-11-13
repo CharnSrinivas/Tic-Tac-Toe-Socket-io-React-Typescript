@@ -14,7 +14,7 @@ export default function swDev()
         {
             console.log(require('./assets/fonts/ComicNeue-Regular.ttf').default)
             navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/sw.js`)
-            console.log(require('./assets/fonts/ComicNeue-Regular.ttf'))
+            console.log((process.env));
             
         }
     })
