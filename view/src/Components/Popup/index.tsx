@@ -16,3 +16,5 @@ export default function index({ content, onExit }: Props): JSX.Element {
         </>
     )
 }
+//https://github.com/timanovsky/subdir-heroku-buildpack
+//https://github.com/mars/create-react-app-buildpack

@@ -18,7 +18,7 @@ const static_files = [
     '/logo.png',
     ...static_assets
 ];
-
+const self = this;
 
 self.addEventListener(
     'install', (event) => {
