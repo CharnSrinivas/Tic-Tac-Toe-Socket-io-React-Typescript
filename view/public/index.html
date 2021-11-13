@@ -15,7 +15,15 @@
 <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    
+    <script>
+        window.addEventListener('load',()=>{
+        if(navigator.serviceWorker)
+        {
+            console.log('Updated 0.1.1')
+            navigator.serviceWorker.register(require('sw.js'));
+        }
+    })
+    </script>
 </body>
 
 </html>

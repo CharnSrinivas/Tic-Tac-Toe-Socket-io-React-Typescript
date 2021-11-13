@@ -1,6 +1,6 @@
 {
     "name": "pwa-tic-tac-toe",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "start_url": ".",
     "private": true,
     "dependencies": {
