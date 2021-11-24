@@ -7,14 +7,15 @@
 │   │   ├── ComicNeue-LightItalic.ttf
 │   │   ├── ComicNeue-Light.ttf
 │   │   └── ComicNeue-Regular.ttf
-│   └── player-icons
-│       ├── frame.svg
-│       ├── o.svg
-│       └── x.svg
+│   ├── icons
+│   │   └── back_arrow.svg
+│   ├── player-icons
+│   │   ├── o.svg
+│   │   └── x.svg
+│   └── sounds
+│       ├── move.ogg
+│       └── player_join.ogg
 ├── Components
-│   ├── Board
-│   │   ├── Board.tsx
-│   │   └── styles.module.css
 │   └── Popup
 │       ├── index.tsx
 │       └── styles.module.css
@@ -23,6 +24,12 @@
 │   ├── App
 │   │   ├── index.tsx
 │   │   └── style.module.css
+│   ├── Game
+│   │   ├── Board.tsx
+│   │   ├── GameInterfaces.ts
+│   │   ├── GameInterface.ts
+│   │   ├── index.tsx
+│   │   └── styles.module.css
 │   └── Home
 │       ├── index.tsx
 │       └── styles.module.css
@@ -42,19 +49,13 @@
 │   │   ├── index.ts
 │   │   └── initialStates.ts
 │   └── store.ts
-<<<<<<< HEAD
-├── swDev.ts
-=======
->>>>>>> e08935dc73310f8a631471c2d87a14da87974a88
 └── Utils
     ├── Services
+    │   ├── Audio
+    │   │   └── AudioService.ts
     │   └── Socket
     │       ├── eventNames.ts
     │       └── SocketService.ts
     └── Utils.ts
 
-<<<<<<< HEAD
-15 directories, 35 files
-=======
-15 directories, 34 files
->>>>>>> e08935dc73310f8a631471c2d87a14da87974a88
+18 directories, 40 files
